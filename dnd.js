@@ -10,9 +10,9 @@ function dragStartHandler(event){
 	originalEvent.dataTransfer.setData("text",$(event.target).data("task-id"));
 	originalEvent.dataTransfer.effectAllowed = "move";
 }
-/**
+/*
 * @param event A jQuery event that occurs when a .droppable as been dropped
-**/
+*/
 function dropHandler(event){
 	event.preventDefault();
 	event.stopPropagation();
@@ -30,8 +30,7 @@ function dropHandler(event){
 $(document).ready(function(){
 	//When a new task/item is creatted it is assigned a unique data attribute which is the task index
 	var taskIndex = 0;
-	$(".text-info").addClass("text-center");
-	$(".createTask").addClass("btn-block").on("click",function(){
+	$(".createTask").on("click",function(){
 		//Find the category whict this button belongs to 
 		var currentCategory = $(this).parent(".box");
 		var categoryId = currentCategory.data("category");
@@ -48,6 +47,7 @@ $(document).ready(function(){
 			//so exit
 			return;
 		}
+		//Append the new task to the clossest dropTarget
 		task.appendTo($(this).prev(".dropTarget"));
 	});
 	$("body").on("dragstart",".droppable",dragStartHandler);
