@@ -1,5 +1,5 @@
 /*
-* @param event A jquery event that occurs when an object is being dragged
+* @param event A jQuery event that occurs when an .droppable is being dragged
 */
 function dragStartHandler(event){
 	//e refers to a jQuery object
@@ -9,6 +9,23 @@ function dragStartHandler(event){
 	//We want to store the data-task-id of the object that is being dragged
 	originalEvent.dataTransfer.setData("text",$(event.target).data("task-id"));
 	originalEvent.dataTransfer.effectAllowed = "move";
+}
+/**
+* @param event A jQuery event that occurs when a .droppable as been dropped
+**/
+function dropHandler(event){
+	event.preventDefault();
+	event.stopPropagation();
+	var originalEvent = event.originalEvent;
+	//Get the task-id of the dropped item
+	var droppedItemId = originalEvent.dataTransfer.getData("text");
+	//Find the dropped item
+	var droppedItem = $("body").find(`[data-task-id='${droppedItemId}']`);
+	//Find the category which it was dragged into
+	var category = $(this).parent(".box").data("category");
+	//Change the data-category-group of the dropped item
+	//and move it from its original position to the new one
+	droppedItem.data("category-group",category).appendTo($(this));
 }
 $(document).ready(function(){
 	//When a new task/item is creatted it is assigned a unique data attribute which is the task index
@@ -27,6 +44,8 @@ $(document).ready(function(){
 			task.text(taskDescription);
 			taskIndex++;
 		}else{
+			//User has left the task description empty
+			//so exit
 			return;
 		}
 		task.appendTo($(this).prev(".dropTarget"));
@@ -37,19 +56,5 @@ $(document).ready(function(){
 		event.stopPropagation();
 		$(this).addClass("highlighted-box");
 	}).on("dragover",false)
-	.on("drop",function(event){
-		event.preventDefault();
-		event.stopPropagation();
-		var originalEvent = event.originalEvent;
-		//Retrieve the data-task-id we stored in the event
-		var taskId = originalEvent.dataTransfer.getData("text");
-		//The object that will be moved is determined by the id we stored on the event parameter
-		var objectToMove =$("body").find(`[data-task-id='${taskId}']`);
-		var category = $(this).parent(".box").data("category");
-		objectToMove.data("category-group",category);
-		//Remove the element that was being draged from its previous position
-		//and append it to the current dropTarget
-		$(objectToMove).appendTo(this);
-		return false;
-	});
+	.on("drop",dropHandler);
 });
