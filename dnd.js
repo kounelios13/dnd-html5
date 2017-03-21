@@ -32,7 +32,7 @@ $(document).ready(function(){
 	var taskIndex = 0;
 	$(".createTask").on("click",function(){
 		//Find the category whict this button belongs to 
-		var currentCategory = $(this).parent(".box");
+		var currentCategory = $(this).parent("h1").parent(".box");
 		var categoryId = currentCategory.data("category");
 		//Create a new task
 		var task = $("<div class='list-group-item droppable' draggable='true' data-task-id="+taskIndex+"></div>");
@@ -48,7 +48,9 @@ $(document).ready(function(){
 			return;
 		}
 		//Append the new task to the clossest dropTarget
-		task.appendTo($(this).prev(".dropTarget"));
+		//We have th category of the task
+		task.appendTo(currentCategory.find(".dropTarget"));
+		currentCategory.height("100%").css("height","100%");
 	});
 	$("body").on("dragstart",".droppable",dragStartHandler);
 	$(".dropTarget").on("dragenter",function(event){

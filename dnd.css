@@ -3,29 +3,23 @@
   -webkit-user-drag: element;
   -khtml-user-select: none;
   -webkit-user-select: none;
-}
+} 
 .highlighted-box {
     box-shadow: 0 0 4px 4px #EBE311;
 }
-
+h1 .glyphicon{
+	font-size:initial;
+	color: initial;
+}
 .dropTarget {
     height: 10em;
-    width: 10em;
+	width: 100%; 
     /* border:2px solid; */
     margin: auto;
-}
-.dropTarget .droppable{
-	margin: auto;
-	position: relative;
-	top: 20%;
+    text-overflow: scroll;
 }
 .droppable {
     background-color: dodgerblue;
-   /*  height: 6em;
-   border-radius: 5px; */
-   /*  box-shadow: 0 0 5px 5px #3D0404; */
-    /* width: 6em; */
+    cursor: move;
 }
-#square2{
-	background-color: red;
-}
+
