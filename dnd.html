@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<!--Prevent page from being cached-->
-		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-		<meta http-equiv="Pragma" content="no-cache" />
-		<meta http-equiv="Expires" content="0" />
-		<title>Drag and drop demo</title>
-		<!-- Latest compiled and minified CSS & JS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-		<script src="https://code.jquery.com/jquery.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-		<script src="dnd.js"></script>
-		<link rel="stylesheet" type="text/css" href="dnd.css">
-	</head>
-	<body>
-		<div class="jumbotron intro text-center">
-			<h1>Todo list</h1>
-		</div>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-3 box" data-category="0">
-					<h1 class="text-info text-center">Idea<span class="createTask glyphicon glyphicon-plus"></span></h1>
-					<div class="dropTarget list-group">
-					</div>
-				</div>
-				<div class="col-md-3 box" data-category="1">
-					<h1 class="text-info text-center">Working on<span class="createTask glyphicon glyphicon-plus"></span></h1>
-					<div class="dropTarget list-group">
-					</div>
-				</div>
-				<div class="col-md-3 box" data-category="2">
-					<h1 class="text-info text-center">Completed<span class="createTask glyphicon glyphicon-plus"></span></h1>
-					<div class="dropTarget list-group">
-					</div>
-				</div>
-				<div class="col-md-3 box" data-category="3">
-					<h1 class="text-info text-center">Accepted<span class="createTask glyphicon glyphicon-plus"></span></h1>
-					<div class="dropTarget list-group">
-					</div>
-				</div>
-			</div>
-		</div>
-	</body>
+    <head>
+        <meta charset="UTF-8">
+        <!--Prevent page from being cached-->
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <title>Drag and drop demo</title>
+        <!-- Latest compiled and minified CSS & JS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="dnd.js"></script>
+        <link rel="stylesheet" type="text/css" href="dnd.css">
+    </head>
+    <body>
+        <div class="jumbotron intro text-center">
+            <h1>Todo list</h1>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 box" data-category="0">
+                    <h1 class="text-info text-center">Idea<span class="createTask glyphicon glyphicon-plus"></span></h1>
+                    <div class="dropTarget list-group">
+                    </div>
+                </div>
+                <div class="col-md-3 box" data-category="1">
+                    <h1 class="text-info text-center">Working on<span class="createTask glyphicon glyphicon-plus"></span></h1>
+                    <div class="dropTarget list-group">
+                    </div>
+                </div>
+                <div class="col-md-3 box" data-category="2">
+                    <h1 class="text-info text-center">Completed<span class="createTask glyphicon glyphicon-plus"></span></h1>
+                    <div class="dropTarget list-group">
+                    </div>
+                </div>
+                <div class="col-md-3 box" data-category="3">
+                    <h1 class="text-info text-center">Accepted<span class="createTask glyphicon glyphicon-plus"></span></h1>
+                    <div class="dropTarget list-group">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

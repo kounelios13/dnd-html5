@@ -5,14 +5,14 @@
   -webkit-user-select: none;
 } 
 h1 .glyphicon{
-	font-size:initial;
-	color: initial;
-	margin-left: 2%;
-	margin-bottom:2%;
+    font-size:initial;
+    color: initial;
+    margin-left: 2%;
+    margin-bottom:2%;
 }
 .dropTarget {
     height: 10em;
-	width: 100%; 
+    width: 100%; 
     margin: auto;
 }
 .droppable {
