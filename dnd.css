@@ -10,6 +10,8 @@
 h1 .glyphicon{
 	font-size:initial;
 	color: initial;
+	margin-left: 2%;
+	margin-bottom:2%;
 }
 .dropTarget {
     height: 10em;

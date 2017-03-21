@@ -50,13 +50,11 @@ $(document).ready(function(){
 		//Append the new task to the clossest dropTarget
 		//We have th category of the task
 		task.appendTo(currentCategory.find(".dropTarget"));
-		currentCategory.height("100%").css("height","100%");
 	});
 	$("body").on("dragstart",".droppable",dragStartHandler);
 	$(".dropTarget").on("dragenter",function(event){
 		event.preventDefault();
 		event.stopPropagation();
-		$(this).addClass("highlighted-box");
 	}).on("dragover",false)
 	.on("drop",dropHandler);
 });
