@@ -4,9 +4,6 @@
   -khtml-user-select: none;
   -webkit-user-select: none;
 } 
-.highlighted-box {
-    box-shadow: 0 0 4px 4px #EBE311;
-}
 h1 .glyphicon{
 	font-size:initial;
 	color: initial;
@@ -16,12 +13,11 @@ h1 .glyphicon{
 .dropTarget {
     height: 10em;
 	width: 100%; 
-    /* border:2px solid; */
     margin: auto;
-    text-overflow: scroll;
 }
 .droppable {
     background-color: dodgerblue;
     cursor: move;
+    overflow: auto;
 }
 

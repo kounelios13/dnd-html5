@@ -19,7 +19,7 @@ function dropHandler(event){
 	var originalEvent = event.originalEvent;
 	//Get the task-id of the dropped item
 	var droppedItemId = originalEvent.dataTransfer.getData("text");
-	//Find the dropped item
+	//Find the dropped item by using its data-task-id attribute
 	var droppedItem = $("body").find(`[data-task-id='${droppedItemId}']`);
 	//Find the category which it was dragged into
 	var category = $(this).parent(".box").data("category");
@@ -48,7 +48,7 @@ $(document).ready(function(){
 			return;
 		}
 		//Append the new task to the clossest dropTarget
-		//We have th category of the task
+		//by finding the dropTarget that is available in our currentCategory
 		task.appendTo(currentCategory.find(".dropTarget"));
 	});
 	$("body").on("dragstart",".droppable",dragStartHandler);
