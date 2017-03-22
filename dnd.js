@@ -74,6 +74,7 @@ function saveTasks(){
         dataToStore[i]=taskData;
     }
     localStorage.setItem("taskList",JSON.stringify(dataToStore));
+    alert("Tasks have been saved");
 }
 function loadTasks(){
     //Load tasks from localStorage
@@ -91,7 +92,15 @@ $(document).ready(function(){
     loadTasks();
     //When a new task/item is creatted it is assigned a unique data attribute which is the task index
     var taskIndex =$(".list-group-item").length;
-    console.log(taskIndex);
+    $("#saveTasksBtn").on("click",saveTasks);
+    $("#deleteAllTasksBtn").on("click",function(){
+        var answer = confirm("Are you sure you want to delete all tasks?");
+        if(answer){
+            $(".droppable").remove();
+            taskIndex = 0;
+            alert("Tasks removed");
+        }
+    });
     $(".createTask").on("click",function(){
         //Find the category in which the clicked plus symbol belongs to
         var currentCategory = $(this).parent("h1").parent(".box");
@@ -118,6 +127,7 @@ $(document).ready(function(){
         //Ask the user for a new task description
         var newTaskDescription = prompt("Enter a new description for this task");
         if(newTaskDescription){
+            //Update the task description
             $(this).text(newTaskDescription);
         }
     });
