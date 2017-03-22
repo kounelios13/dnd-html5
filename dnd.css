@@ -20,4 +20,11 @@ h1 .glyphicon{
     cursor: move;
     overflow: auto;
 }
+#dangerZone{
+    display: none;
+    border:2px solid red;
+    position:fixed;
+    top: 90%;
+    left: 20%;
+}
 
