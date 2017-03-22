@@ -79,7 +79,7 @@ function saveTasks(){
 function loadTasks(){
     //Load tasks from localStorage
     var isLocalStorageSupported = !!localStorage;
-    if(!isLocalStorageSupported){
+    if(!isLocalStorageSupported || !localStorage.getItem("taskList")){
         return;
     }
     var loadedTasksList = JSON.parse(localStorage.getItem("taskList"));

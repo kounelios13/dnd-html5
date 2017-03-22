@@ -23,8 +23,7 @@ h1 .glyphicon{
 #dangerZone{
     display: none;
     border:2px solid red;
-    position:fixed;
-    top: 90%;
-    left: 20%;
+    position:relative;
+    margin:auto;
 }
 
