@@ -80,6 +80,7 @@ function loadTasks(){
     //Load tasks from localStorage
     var isLocalStorageSupported = !!localStorage;
     if(!isLocalStorageSupported || !localStorage.getItem("taskList")){
+        //Maybe localStorage is not supported or maybe there are no data saved
         return;
     }
     var loadedTasksList = JSON.parse(localStorage.getItem("taskList"));
@@ -148,6 +149,7 @@ $(document).ready(function(){
             var taskId = event.originalEvent.dataTransfer.getData("text");
             deleteTask(taskId);
         }
+        $("#dangerZone").hide();
     });
 });
 
