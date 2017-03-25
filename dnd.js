@@ -91,7 +91,7 @@ function loadTasks(){
 }
 $(document).ready(function(){
     loadTasks();
-    //When a new task/item is creatted it is assigned a unique data attribute which is the task index
+    //When a new task/item is created it is assigned a unique data attribute which is the task index
     var taskIndex =$(".list-group-item").length;
     $("#saveTasksBtn").on("click",saveTasks);
     $("#deleteAllTasksBtn").on("click",function(){
