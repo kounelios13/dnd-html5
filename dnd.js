@@ -6,9 +6,17 @@ function dragStartHandler(event){
     //that does not have dataTransfer property
     //so we have to refer to the original javascript event
     var originalEvent = event.originalEvent;
-    //We want to store the data-task-id of the object that is being dragged
-    originalEvent.dataTransfer.setData("text",$(event.target).data("task-id"));
+    //We want to store an object that contains the task description and its id
+    //We will use this object to be able to move a task from one browser to another
+    $target = $(event.target);
+    var taskToMove = {
+        description:$target.text(),
+        id:$target.data("task-id")
+    };
+    originalEvent.dataTransfer.setData("taskToMove",JSON.stringify(taskToMove));
     originalEvent.dataTransfer.effectAllowed = "move";
+    //Remove the current dragged object
+    //$target.remove();
     //Show the dangerZone just in case
     //the user wants to dro a task there to delete it
     $("#dangerZone").show();
@@ -20,11 +28,23 @@ function dropHandler(event){
     event.preventDefault();
     event.stopPropagation();
     var originalEvent = event.originalEvent;
-    //Get the task-id of the dropped item
-    var droppedItemId = originalEvent.dataTransfer.getData("text");
-    //Find the dropped item by using its data-task-id attribute
-    var droppedItem = $("body").find(`[data-task-id='${droppedItemId}']`);
-    //Find the category which it was dragged into
+    var droppedTask = JSON.parse(originalEvent.dataTransfer.getData("taskToMove"));
+    var taskExistsInView = $(  `body [data-task-id=${droppedTask["id"]}]`).length>0;
+    var droppedItem;
+    if(taskExistsInView){
+        //The dragged task comes from the same page so we can remove it from its previous category
+        //and move it to the new one
+        droppedItem =  $(  `body [data-task-id=${droppedTask["id"]}]`);
+    }
+    else{
+        //Well well well
+        //The dragged task comes from another tab/browser
+        //We can't remove it but we can create it in the current window
+        //using the data provided from the droppedTask object
+        droppedItem = $(`<div class='list-group-item droppable' draggable='true'>${droppedTask['description']}</div>`);
+        //This will cause a bug for sure but right now I don't care
+        droppedItem.data("task-id",$(".droppable").length);
+    }
     var category = $(this).parent(".box").data("category");
     //Change the data-category-group of the dropped item
     //and move it from its original position to the new one
