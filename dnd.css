@@ -22,7 +22,7 @@ h1 .glyphicon{
     overflow: auto;
 }
 #dangerZone{
-    display: none;
+    /* display: none; */
     border:2px solid red;
     position:relative;
     margin:auto;
