@@ -1,3 +1,22 @@
+//Generate a UUID per tab
+//this will help us identify when a droppedTask comes from the same page or not
+var uuidGenerator =(function() {
+  var self = {};
+  var lut = []; for (var i=0; i<256; i++) { lut[i] = (i<16?'0':'')+(i).toString(16); }
+  self.generate = function() {
+    var d0 = Math.random()*0xffffffff|0;
+    var d1 = Math.random()*0xffffffff|0;
+    var d2 = Math.random()*0xffffffff|0;
+    var d3 = Math.random()*0xffffffff|0;
+    return lut[d0&0xff]+lut[d0>>8&0xff]+lut[d0>>16&0xff]+lut[d0>>24&0xff]+'-'+
+      lut[d1&0xff]+lut[d1>>8&0xff]+'-'+lut[d1>>16&0x0f|0x40]+lut[d1>>24&0xff]+'-'+
+      lut[d2&0x3f|0x80]+lut[d2>>8&0xff]+'-'+lut[d2>>16&0xff]+lut[d2>>24&0xff]+
+      lut[d3&0xff]+lut[d3>>8&0xff]+lut[d3>>16&0xff]+lut[d3>>24&0xff];
+  }
+  return self;
+})();
+var tabUUID = uuidGenerator.generate();
+var taskIndex = 0;
 /*
 * @param event A jQuery event that occurs when an .droppable is being dragged
 */
@@ -11,15 +30,11 @@ function dragStartHandler(event){
     $target = $(event.target);
     var taskToMove = {
         description:$target.text(),
-        id:$target.data("task-id")
+        id:$target.data("task-id"),
+        tabUUID:$target.data("tab-uuid")
     };
-    originalEvent.dataTransfer.setData("taskToMove",JSON.stringify(taskToMove));
+    originalEvent.dataTransfer.setData("application/json",JSON.stringify(taskToMove));
     originalEvent.dataTransfer.effectAllowed = "move";
-    //Remove the current dragged object
-    //$target.remove();
-    //Show the dangerZone just in case
-    //the user wants to dro a task there to delete it
-    $("#dangerZone").show();
 }
 /*
 * @param event A jQuery event that occurs when a .droppable as been dropped
@@ -28,13 +43,13 @@ function dropHandler(event){
     event.preventDefault();
     event.stopPropagation();
     var originalEvent = event.originalEvent;
-    var droppedTask = JSON.parse(originalEvent.dataTransfer.getData("taskToMove"));
-    var taskExistsInView = $(  `body [data-task-id=${droppedTask["id"]}]`).length>0;
+    var droppedTask = JSON.parse(originalEvent.dataTransfer.getData("application/json"));
     var droppedItem;
+    var taskExistsInView = droppedTask["uuid"] != tabUUID;
     if(taskExistsInView){
         //The dragged task comes from the same page so we can remove it from its previous category
         //and move it to the new one
-        droppedItem =  $(  `body [data-task-id=${droppedTask["id"]}]`);
+        droppedItem =  $(`body [data-task-id=${droppedTask["id"]}]`);
     }
     else{
         //Well well well
@@ -42,15 +57,12 @@ function dropHandler(event){
         //We can't remove it but we can create it in the current window
         //using the data provided from the droppedTask object
         droppedItem = $(`<div class='list-group-item droppable' draggable='true'>${droppedTask['description']}</div>`);
-        //This will cause a bug for sure but right now I don't care
-        droppedItem.data("task-id",$(".droppable").length);
+        droppedItem.data({"task-id":taskIndex++,"tab-uuid":tabUUID});
     }
     var category = $(this).parent(".box").data("category");
     //Change the data-category-group of the dropped item
     //and move it from its original position to the new one
     droppedItem.data("category",category).appendTo($(this));
-   //Hide the danger zone
-    $("#dangerZone").hide();
 }
 /*
 * @param The id of the task we want to delete
@@ -68,6 +80,7 @@ function createTask(taskElement){
     var taskText = taskElement["text"];
     var taskCategory = taskElement["category"];
     var taskToAppend = $(`<div class='list-group-item droppable' draggable='true' data-task-id='${taskId}' data-category='${taskCategory}'>${taskText}</div>`);
+    taskToAppend.data("tab-uuid",tabUUID);
     //Find the dropTarget to append the created task
     var dropTarget = $("body").find(`[data-category='${taskCategory}'] .dropTarget`);
     taskToAppend.appendTo(dropTarget);
@@ -86,7 +99,7 @@ function saveTasks(){
         var currentTask = tasks[i];
         //For each task we need to store
         //its text, and its category
-        //It will be reassigned a unique id after it is loaded back from localStorage
+        //It will be reassigned a unique id and a tabUUID after it is loaded back from localStorage
         var taskData = {
             text:$(currentTask).text(),
             category:$(currentTask).data("category")
@@ -112,7 +125,7 @@ function loadTasks(){
 $(document).ready(function(){
     loadTasks();
     //When a new task/item is created it is assigned a unique data attribute which is the task index
-    var taskIndex =$(".list-group-item").length;
+    taskIndex =$(".list-group-item").length;
     $("#saveTasksBtn").on("click",saveTasks);
     $("#deleteAllTasksBtn").on("click",function(){
         var answer = confirm("Are you sure you want to delete all tasks?");
@@ -127,7 +140,8 @@ $(document).ready(function(){
         var currentCategory = $(this).parent("h1").parent(".box");
         var categoryId = currentCategory.data("category");
         //Create a new task
-        var task = $(`<div class='list-group-item droppable' draggable='true' data-task-id='${taskIndex}' data-category='${categoryId}'></div>`);
+        var task = $(`<div class='list-group-item droppable' draggable='true'></div>`);
+        task.data({"task-id":taskIndex,"category":categoryId,"tab-uuid":tabUUID});
         //Ask the user for a task description
         var taskDescription = prompt("Enter task description");
         if(taskDescription){
@@ -162,14 +176,19 @@ $(document).ready(function(){
         event.stopPropagation();
     }).on("dragover",false)
     .on("drop",function(event){
-        //Let the user confirm that he wants to delete the task they dropped here
-        var allowDelete = confirm("Are you sure you want to delete this task?");
-        if(allowDelete){
-            //Find its id to remove it
-            var taskId = event.originalEvent.dataTransfer.getData("text");
-            deleteTask(taskId);
+        //What we need to check first is if the dropped task comes from the same page
+        var droppedTask    = JSON.parse(event.originalEvent.dataTransfer.getData("application/json"));
+        var droppedTaskTabUUID  = droppedTask["tabUUID"];
+        if(droppedTaskTabUUID != tabUUID){
+            alert("Task comes from another page and cannot be deleted");
+            return;
+        }else{
+            var droppedTaskId = droppedTask["id"];
+            var answer = confirm("Are you sure you want to delete this task?");
+            if(answer){
+                deleteTask(droppedTaskId);
+            }
         }
-        $("#dangerZone").hide();
     });
 });
 
