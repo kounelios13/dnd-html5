@@ -3,6 +3,7 @@
 var uuidGenerator =(function() {
   var self = {};
   var lut = []; for (var i=0; i<256; i++) { lut[i] = (i<16?'0':'')+(i).toString(16); }
+  //Generates an RFC-4 compiant uuid
   self.generate = function() {
     var d0 = Math.random()*0xffffffff|0;
     var d1 = Math.random()*0xffffffff|0;
@@ -45,7 +46,7 @@ function dropHandler(event){
     var originalEvent = event.originalEvent;
     var droppedTask = JSON.parse(originalEvent.dataTransfer.getData("application/json"));
     var droppedItem;
-    var taskExistsInView = droppedTask["uuid"] != tabUUID;
+    var taskExistsInView = droppedTask["uuid"] == tabUUID;
     if(taskExistsInView){
         //The dragged task comes from the same page so we can remove it from its previous category
         //and move it to the new one
