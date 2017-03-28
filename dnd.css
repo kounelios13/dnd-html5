@@ -4,6 +4,9 @@
   -khtml-user-select: none;
   -webkit-user-select: none;
 } 
+body{
+  background: black;
+}
 h1 .glyphicon{
     font-size:initial;
     color: initial;
@@ -25,6 +28,6 @@ h1 .glyphicon{
     /* display: none; */
     border:2px solid red;
     position:relative;
-    margin:auto;
+    margin:1% auto;
 }
 
