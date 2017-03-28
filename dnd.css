@@ -9,7 +9,7 @@ body{
 }
 h1 .glyphicon{
     font-size:initial;
-    color: initial;
+    color: white;
     margin-left: 2%;
     margin-bottom:2%;
 }
@@ -25,7 +25,8 @@ h1 .glyphicon{
     overflow: auto;
 }
 #dangerZone{
-    /* display: none; */
+    border-radius: 5px;
+    padding:10px;
     border:2px solid red;
     position:relative;
     margin:1% auto;
