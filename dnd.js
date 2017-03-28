@@ -46,7 +46,7 @@ function dropHandler(event){
     var originalEvent = event.originalEvent;
     var droppedTask = JSON.parse(originalEvent.dataTransfer.getData("application/json"));
     var droppedItem;
-    var taskExistsInView = droppedTask["uuid"] == tabUUID;
+    var taskExistsInView = droppedTask["uuid"] != tabUUID;
     if(taskExistsInView){
         //The dragged task comes from the same page so we can remove it from its previous category
         //and move it to the new one
@@ -165,6 +165,14 @@ $(document).ready(function(){
         if(newTaskDescription){
             //Update the task description
             $(this).text(newTaskDescription);
+        }
+    });
+    $(".box h1").on("dblclick",function(){
+        //Let the user change the title of a category by double clicking it
+        var newTitle = prompt("Enter a new title");
+        if(newTitle){
+
+            $(this).find(".categoryTitle").text(newTitle);
         }
     });
     $(".dropTarget").on("dragenter",function(event){
