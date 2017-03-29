@@ -129,7 +129,7 @@ function loadTasks(){
 $(document).ready(function(){
     loadTasks();
     //When a new task/item is created it is assigned a unique data attribute which is the task index
-    taskIndex =$(".list-group-item").length;
+    taskIndex =$(".list-group-item").length; 
     $("#saveTasksBtn").on("click",saveTasks);
     $("#deleteAllTasksBtn").on("click",function(){
         var answer = confirm("Are you sure you want to delete all tasks?");
@@ -174,6 +174,7 @@ $(document).ready(function(){
     $("body").on("click",".glyphicon-trash",function(){
         var answer = confirm("Are you sure you want to delete this task?");
         if(answer){
+            //Find the id of the task you want to delete
             var taskId = $(this).parent(".droppable").data("task-id");
             deleteTask(taskId);
         }
@@ -182,7 +183,6 @@ $(document).ready(function(){
         //Let the user change the title of a category by double clicking it
         var newTitle = prompt("Enter a new title");
         if(newTitle){
-
             $(this).find(".categoryTitle").text(newTitle);
         }
     });
