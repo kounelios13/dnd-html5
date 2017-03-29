@@ -80,7 +80,10 @@ function createTask(taskElement){
     var taskId = taskElement["id"];
     var taskText = taskElement["text"];
     var taskCategory = taskElement["category"];
-    var taskToAppend = $(`<div class='list-group-item droppable' draggable='true' data-task-id='${taskId}' data-category='${taskCategory}'>${taskText}</div>`);
+    var taskToAppend = $(`<div class='list-group-item droppable' draggable='true' data-task-id='${taskId}' data-category='${taskCategory}'><span class='taskDescription'>${taskText}</span></div>`);
+    //Append a delete icon
+    var deleteIcon = $("<span class='glyphicon glyphicon-trash pull-right'></span>");
+    deleteIcon.appendTo(taskToAppend);
     taskToAppend.data("tab-uuid",tabUUID);
     //Find the dropTarget to append the created task
     var dropTarget = $("body").find(`[data-category='${taskCategory}'] .dropTarget`);
@@ -141,13 +144,14 @@ $(document).ready(function(){
         var currentCategory = $(this).parent("h1").parent(".box");
         var categoryId = currentCategory.data("category");
         //Create a new task
-        var task = $(`<div class='list-group-item droppable' draggable='true'></div>`);
-        task.data({"task-id":taskIndex,"category":categoryId,"tab-uuid":tabUUID});
+        var task = $(`<div class='list-group-item droppable' draggable='true' data-task-id='${taskIndex}' data-category='${categoryId}' data-tab-uuid='${tabUUID}'><span class='taskDescription'></span></div>`);
+        //Append a delete icon to the new task
+        task.append("<span class='glyphicon glyphicon-trash pull-right'></span>");
         //Ask the user for a task description
         var taskDescription = prompt("Enter task description");
         if(taskDescription){
             //If the user wants to create a non empty task
-            task.text(taskDescription);
+            task.find(".taskDescription").text(taskDescription);
             taskIndex++;
         }else{
             //User has left the task description empty
@@ -164,7 +168,14 @@ $(document).ready(function(){
         var newTaskDescription = prompt("Enter a new description for this task");
         if(newTaskDescription){
             //Update the task description
-            $(this).text(newTaskDescription);
+            $(this).find(".taskDescription").text(newTaskDescription);
+        }
+    });
+    $("body").on("click",".glyphicon-trash",function(){
+        var answer = confirm("Are you sure you want to delete this task?");
+        if(answer){
+            var taskId = $(this).parent(".droppable").data("task-id");
+            deleteTask(taskId);
         }
     });
     $(".box h1").on("dblclick",function(){
@@ -180,24 +191,5 @@ $(document).ready(function(){
         event.stopPropagation();
     }).on("dragover",false)
     .on("drop",dropHandler);
-    $("#dangerZone").on("dragenter",function(event){
-        event.preventDefault();
-        event.stopPropagation();
-    }).on("dragover",false)
-    .on("drop",function(event){
-        //What we need to check first is if the dropped task comes from the same page
-        var droppedTask    = JSON.parse(event.originalEvent.dataTransfer.getData("application/json"));
-        var droppedTaskTabUUID  = droppedTask["tabUUID"];
-        if(droppedTaskTabUUID != tabUUID){
-            alert("Task comes from another page and cannot be deleted");
-            return;
-        }else{
-            var droppedTaskId = droppedTask["id"];
-            var answer = confirm("Are you sure you want to delete this task?");
-            if(answer){
-                deleteTask(droppedTaskId);
-            }
-        }
-    });
 });
 
