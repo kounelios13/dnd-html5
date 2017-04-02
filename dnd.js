@@ -46,7 +46,7 @@ function dropHandler(event){
     var originalEvent = event.originalEvent;
     var droppedTask = JSON.parse(originalEvent.dataTransfer.getData("application/json"));
     var droppedItem;
-    var taskExistsInView = droppedTask["uuid"] != tabUUID;
+    var taskExistsInView = droppedTask["tabUUID"] == tabUUID;
     if(taskExistsInView){
         //The dragged task comes from the same page so we can remove it from its previous category
         //and move it to the new one
@@ -57,8 +57,10 @@ function dropHandler(event){
         //The dragged task comes from another tab/browser
         //We can't remove it but we can create it in the current window
         //using the data provided from the droppedTask object
-        droppedItem = $(`<div class='list-group-item droppable' draggable='true'>${droppedTask['description']}</div>`);
-        droppedItem.data({"task-id":taskIndex++,"tab-uuid":tabUUID});
+        droppedItem = $(`<div class='list-group-item droppable' draggable='true' data-task-id='${taskIndex++}' data-tab-uuid='${tabUUID}'>${droppedTask['description']}</div>`);
+        //Create a delete icon
+        var deleteIcon = $("<span class='glyphicon glyphicon-trash pull-right'></span>");
+        deleteIcon.appendTo(droppedItem);
     }
     var category = $(this).parent(".box").data("category");
     //Change the data-category-group of the dropped item
